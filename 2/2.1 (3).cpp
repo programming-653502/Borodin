@@ -17,7 +17,7 @@ int main()
     int switcher, exit = 0;
     string switch_check;
 
-    cout << "\t\tStudy of triangles \n-------------------------------------------------\n";
+    cout << "\t\tMathematical builder \n-------------------------------------------------\n";
     cout << "Welcome to the math program\n" << endl;
 
     do
@@ -71,6 +71,7 @@ int main()
     return 0;
 }
 
+
 float segm_1, segm_2, segm_3;
 double checkfunction(string number){
     int check = 0;
@@ -95,6 +96,7 @@ double checkfunction(string number){
     }
 }
 
+
 int checkfunction_2(string number){
     int check = 0;
     for (int i = 0; number[i] != '\0'; i++)
@@ -112,13 +114,16 @@ int checkfunction_2(string number){
         int num = atoi(number.c_str());
         return num;
     }
+
 }
+
 
 float funct_1(float x1, float y1, float x2, float y2){
 	float result;
 	result = sqrt( ( pow ( (x2 - x1), 2) ) + ( pow ( (y2 - y1), 2 ) ) );
 	return result;
 }
+
 
 void segm(){
 	string a1_check, b1_check, a2_check, b2_check, c1_check, d1_check, c2_check, d2_check, e1_check, f1_check, e2_check, f2_check;
@@ -161,18 +166,27 @@ void segm(){
 	segm_3 = funct_1(e1, f1, e2, f2);
 }
 	
+        
 void drawling(){
 	bool q;
-	if (segm_1 + segm_2 >= segm_3 && segm_3 + segm_2 >= segm_1 && segm_1 + segm_3 >= segm_2) q = true; else q = false;{}
+	if (segm_1 == segm_2 == segm_3 == 0){
+		cout <<"\nPlease go back and start with item one, because\n";
+	}
+	else if (segm_1 + segm_2 >= segm_3 && segm_3 + segm_2 >= segm_1 && segm_1 + segm_3 >= segm_2) q = true; else q = false;{}
  		if (q) {
 		 cout << "=========\nTriangle with such sides exists\n=========\n" << endl;
 		}
 		else cout << "=========\nTriangle with such sides does not exist\n=========\n" << endl;
-}
+   }
+
 
 void Triangle(){
 	bool q;
-    if ( (pow(segm_1, 2) + pow(segm_2, 2) == pow(segm_3, 2)) || ( pow(segm_3, 2) + pow(segm_2, 2) == pow(segm_1, 2)) || ( pow(segm_1, 2) + pow(segm_3, 2) == pow(segm_2, 2) ) ) q=true; else q=false;{}
+	if (segm_1 == segm_2 == segm_3 == 0){
+		cout <<"\nPlease go back and start with item one, because you did not enter the values of the segments \n";
+	}
+	
+    else if ( (pow(segm_1, 2) + pow(segm_2, 2) == pow(segm_3, 2)) || ( pow(segm_3, 2) + pow(segm_2, 2) == pow(segm_1, 2)) || ( pow(segm_1, 2) + pow(segm_3, 2) == pow(segm_2, 2) ) ) q=true; else q=false;{}
 	 if (q) { cout << "=========\nTriangle is rectangular\n=========\n" << endl;
 		}
 	 else if (segm_1 == segm_2 || segm_1 == segm_3 || segm_2 == segm_3){
@@ -195,4 +209,4 @@ void per_ar(){
         cout << "=======\nArea of a triangle: " << area<< endl ;
         cout << "Perimeter of a triangle: " << perimeter <<  endl;
         cout << "=======\n";
-}
+   }
