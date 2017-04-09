@@ -1,1 +1,1 @@
-(blackone["Тихийдон"{writtenbyMikhailSholokhov{1940}}])?
+(blackone["Тихийдон"{writtenbyMikhailSholokhov{1940}}])
