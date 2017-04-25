@@ -5,7 +5,7 @@ using namespace std;
 struct stack // Стек в виде односвязного списка
 {
     char data;
-	stack* next;// указатель на структуру stack
+    stack* next;// указатель на структуру stack
 };
 
 void initialized_Stack(stack** pointer_to_the_stack)//инициализация стека
