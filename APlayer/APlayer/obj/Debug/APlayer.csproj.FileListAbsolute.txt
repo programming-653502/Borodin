@@ -1,0 +1,12 @@
+F:\Projects\APlayer\src\APlayer\APlayer\bin\Debug\APlayer.exe.config
+C:\Users\Borod\Desktop\Новая папка\APlayer\APlayer\bin\Debug\APlayer.exe.config
+C:\Users\Borod\Desktop\Новая папка\APlayer\APlayer\bin\Debug\APlayer.exe
+C:\Users\Borod\Desktop\Новая папка\APlayer\APlayer\bin\Debug\APlayer.pdb
+C:\Users\Borod\Desktop\Новая папка\APlayer\APlayer\obj\Debug\APlayer.FormMain.resources
+C:\Users\Borod\Desktop\Новая папка\APlayer\APlayer\obj\Debug\APlayer.Properties.Resources.resources
+C:\Users\Borod\Desktop\Новая папка\APlayer\APlayer\obj\Debug\APlayer.csproj.GenerateResource.Cache
+C:\Users\Borod\Desktop\Новая папка\APlayer\APlayer\obj\Debug\APlayer.exe
+C:\Users\Borod\Desktop\Новая папка\APlayer\APlayer\obj\Debug\APlayer.pdb
+F:\APlayer\APlayer\bin\Debug\APlayer.exe.config
+F:\APlayer\APlayer\obj\Debug\APlayer.exe
+F:\APlayer\APlayer\obj\Debug\APlayer.pdb
