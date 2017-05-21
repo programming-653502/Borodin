@@ -102,7 +102,7 @@ private:
 	int autobaseSize;   // размер массива
 	int currentYear;	// текущий год
 
-	enum opA
+	enum opAuto
 	{
 		FMOD,
 		FYEAR,
@@ -114,7 +114,7 @@ private:
 	} commandAuto;  // переменная хранит выбранное пользователем действие,
                     // которое необходимо выполнить с базой автомобилей (поиск по заданному полю, сортировка)
 
-	enum opB
+	enum opBuyer
 	{
 		FNAMEB,
 		FMODB,
@@ -263,9 +263,9 @@ void Base::findPosition()
 			cout << "\nЗапись:\t" << i + 1 << "\n\tМодель:\t\t" << autoBase[i].type << "\n\tОбъем:\t\t" << autoBase[i].volume << "\n\tГод:\t\t" << autoBase[i].year << "\n\tБазовая цена:\t" << autoBase[i].price << "\n\tИтоговая цена:\t" << autoBase[i].priseout <<"\n\tПрибыль:\t"<<profit(autoBase[i])<< endl;
 		}
     }
-    
+
     // если позиции не найдены вывыод сообщения
-	if (posCount == 0)  
+	if (posCount == 0)
 	{
 	cout << "подходящих записей не найдено:" << endl;
 	cout << endl;
@@ -283,9 +283,9 @@ void Base::findPosition()
 
 		//вспомогательная переменная, хранит ответ пользователя (да, нет, отмена), полученный при работе функции меню.
 		int m = mMenu(yesNo, "\tСформировать заявку для поставщика ?\n\n", 2);
-        
+
         // сформировать заявку
-		if (m == 0)  
+		if (m == 0)
 		{
 			// массив строк меню, описывающие найденные позиции
 			char** foundposList = new char*[posCount];
@@ -295,7 +295,7 @@ void Base::findPosition()
 				if ((strcmp(autoBase[i].type, clientBase[id].type) == 0) && (autoBase[i].priseout <= clientBase[id].price) && (autoBase[i].year >= clientBase[id].year))
 				{
 				    // новая строка меню
-					foundposList[j] = new char[200];  
+					foundposList[j] = new char[200];
 					foundposList[j][0] = '\0';
 
 					//форматированная запись в строку
@@ -332,9 +332,9 @@ void Base::findPosition()
 			delete[]foundposList;
 		}
 	}
-	
+
 	delete[]clientbaseList;
-	
+
 	if (deli != -1)
 	{
 		int j = 0;
@@ -395,11 +395,11 @@ int Base::mMenu(char ** mMat, char * header, int mSize)
             {
                 // форматирование строки совпадающей текущим пунктом
 				cout << "---> " << mMat[i] << endl;
-            }  
+            }
 			else
             {
                 //  форматирование прочих строк меню
-                cout << "    " << mMat[i] << endl;  
+                cout << "    " << mMat[i] << endl;
             }
 		}
 		int key = GArrow();
@@ -543,14 +543,14 @@ void Base::AddBuyer()
         system("pause");
         return;
     }
-    
+
 	BUYER* Temp = new BUYER[clientbaseSize + 1];
-	
+
 	for (int i = 0; i < clientbaseSize; i++)
     {
         Temp[i] = clientBase[i];
     }
-    
+
 	delete[]clientBase;
 	clientBase = Temp;
 
@@ -765,7 +765,7 @@ void Base::ClearAuto()
 void Base::ReadAuto()
 {
 	ClearAuto();
-	
+
     // in - файловая переменная для чтения базы автомобилей.
 	ifstream in("auto.dat", ios::binary | ios::in);
 	in >> autobaseSize;
@@ -854,7 +854,7 @@ void Base::Info()
     {
 		cout << " Размер базы клиентов: " << clientbaseSize << endl;
     }
-    
+
 	system("pause");
 }
 
@@ -877,7 +877,7 @@ void Base::toDoAuto()
 	todo[SPRICE] = " Сортировка, цена ";
 	todo[SYEAR] = " Сортировка, год выпуска";
 
-	commandAuto = (opA)mMenu(todo, "\tРабота с базой автомобилей\n\n", EXIT + 1);
+	commandAuto = (opAuto)mMenu(todo, "\tРабота с базой автомобилей\n\n", EXIT + 1);
 	if(commandAuto != EXIT)
     {
         Find_Sort_Auto();
@@ -1003,7 +1003,7 @@ void Base::FindInBase()
 	}
 
 	cout << "Критерию поиска соответствуют записи:" << endl;
-	
+
 	bool flag = true;
 
 	for (int i = 0; i < clientbaseSize; i++)
@@ -1062,7 +1062,7 @@ void Base::toDoBuyer()
 	todo[FYEARB] = " Поиск, год выпуска";
 	todo[EXIBT] = " Отмена";
 
-	commandBuyer = (opB)mMenu(todo, "\tРабота с базой клиентов\n\n", EXIBT + 1);
+	commandBuyer = (opBuyer)mMenu(todo, "\tРабота с базой клиентов\n\n", EXIBT + 1);
 	if (commandBuyer != EXIBT)
     {
         FindInBase();
