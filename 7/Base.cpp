@@ -12,8 +12,8 @@ using namespace std;
 HANDLE _ConsoleOut = ::GetStdHandle(STD_OUTPUT_HANDLE);   // дескриптор консоли
 BOOL console_size(short x, short y)                       // изменение размера буфера консоли
 {
-    //структура хранения координат буфера консоли, через переменную типа COORD
-    //происходит передача параметров (размера буфера консоли) в функцию SetConsoleScreenBufferSize ( функция Windows API).
+    	//структура хранения координат буфера консоли, через переменную типа COORD
+    	//происходит передача параметров (размера буфера консоли) в функцию SetConsoleScreenBufferSize ( функция Windows API).
 	COORD size = { x, y };
 	return ::SetConsoleScreenBufferSize(_ConsoleOut, size);
 }
