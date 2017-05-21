@@ -9,99 +9,101 @@
 
 using namespace std;
 
-HANDLE _ConsoleOut = ::GetStdHandle(STD_OUTPUT_HANDLE);   // дескриптор консоли
-BOOL console_size(short x, short y)                       // изменение размера буфера консоли
+HANDLE _ConsoleOut = ::GetStdHandle(STD_OUTPUT_HANDLE);   // РґРµСЃРєСЂРёРїС‚РѕСЂ РєРѕРЅСЃРѕР»Рё
+BOOL console_size(short x, short y)                       // РёР·РјРµРЅРµРЅРёРµ СЂР°Р·РјРµСЂР° Р±СѓС„РµСЂР° РєРѕРЅСЃРѕР»Рё
 {
+    //СЃС‚СЂСѓРєС‚СѓСЂР° С…СЂР°РЅРµРЅРёСЏ РєРѕРѕСЂРґРёРЅР°С‚ Р±СѓС„РµСЂР° РєРѕРЅСЃРѕР»Рё, С‡РµСЂРµР· РїРµСЂРµРјРµРЅРЅСѓСЋ С‚РёРїР° COORD
+    //РїСЂРѕРёСЃС…РѕРґРёС‚ РїРµСЂРµРґР°С‡Р° РїР°СЂР°РјРµС‚СЂРѕРІ (СЂР°Р·РјРµСЂР° Р±СѓС„РµСЂР° РєРѕРЅСЃРѕР»Рё) РІ С„СѓРЅРєС†РёСЋ SetConsoleScreenBufferSize ( С„СѓРЅРєС†РёСЏ Windows API).
 	COORD size = { x, y };
 	return ::SetConsoleScreenBufferSize(_ConsoleOut, size);
 }
 
-struct A
-{                            // описание структуры хранения записей базы автомобилей
-	int   volume;							// объем двигателя
-	int   year;							// год производства
-	int   price;						// базовая цена
-	int   priseout;						// цена после уплаты пошлины с учетом наценки поставщика
-	char  type[80];					// модель автомобиля
-	A()
+struct AUTO
+{                           // РѕРїРёСЃР°РЅРёРµ СЃС‚СЂСѓРєС‚СѓСЂС‹ С…СЂР°РЅРµРЅРёСЏ Р·Р°РїРёСЃРµР№ Р±Р°Р·С‹ Р°РІС‚РѕРјРѕР±РёР»РµР№
+	int   volume;			// РѕР±СЉРµРј РґРІРёРіР°С‚РµР»СЏ
+	int   year;				// РіРѕРґ РїСЂРѕРёР·РІРѕРґСЃС‚РІР°
+	int   price;			// Р±Р°Р·РѕРІР°СЏ С†РµРЅР°
+	int   priseout;			// С†РµРЅР° РїРѕСЃР»Рµ СѓРїР»Р°С‚С‹ РїРѕС€Р»РёРЅС‹ СЃ СѓС‡РµС‚РѕРј РЅР°С†РµРЅРєРё РїРѕСЃС‚Р°РІС‰РёРєР°
+	char   type[20];		// РјРѕРґРµР»СЊ Р°РІС‚РѕРјРѕР±РёР»СЏ
+	AUTO()
 	{
-	    memset(this, 0, sizeof(A));
-    } // конструктор (обнуляет записи)
+	    memset(this, 0, sizeof(AUTO));
+    };  // РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ (РѕР±РЅСѓР»СЏРµС‚ Р·Р°РїРёСЃРё)
 };
 
-struct B
-{						  // описание структуры хранения записей базы клиентов
-	int   year;           // год производства (не старше)
-	int   price;          // цена (не выше)
-	char  type[80];       // желаемая модель
-	char  Full_name[80];  // имя клиента
-	B()
+struct BUYER
+{							 // РѕРїРёСЃР°РЅРёРµ СЃС‚СЂСѓРєС‚СѓСЂС‹ С…СЂР°РЅРµРЅРёСЏ Р·Р°РїРёСЃРµР№ Р±Р°Р·С‹ РєР»РёРµРЅС‚РѕРІ
+	int   year;              // РіРѕРґ РїСЂРѕРёР·РІРѕРґСЃС‚РІР° (РЅРµ СЃС‚Р°СЂС€Рµ)
+	int   price;             // С†РµРЅР° (РЅРµ РІС‹С€Рµ)
+	char   type[20];         // Р¶РµР»Р°РµРјР°СЏ РјРѕРґРµР»СЊ
+	char   FullName[20];     // РёРјСЏ РєР»РёРµРЅС‚Р°
+	BUYER()
 	{
-	    memset(this, 0, sizeof(B));
-    } // конструктор (обнуляет записи)
+	    memset(this, 0, sizeof(BUYER));
+    };  // РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ (РѕР±РЅСѓР»СЏРµС‚ Р·Р°РїРёСЃРё)
 };
+
 
 class Base
 {
+
 public:
 
-	void initMenu();                   // Инициализация интерфейса
+	void initMenu();    // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РёРЅС‚РµСЂС„РµР№СЃР°
 	Base();
 	~Base();
 
 private:
 
-	// методы для работы с базой автомобилей (A - Auto)
-	void AddA();	// добавить запись
-	void NewA();	// создать и заполнить базу
-	void WriteA();	// записать в бинарный файл
-	void ClearA();	// выгрузить базу из памяти
-	void ReadA();	// прочитать из бинарного файла
-	void ShowA();	// отобразить в консоль
-	void EditA();	// редактировать записи в базе
-	void DeleteA();	// удалить запись из базы
-	void toDoA();	// выбор действия
-	bool ComparisonA(A&, A&); //  сравнение двух записей по выбранному полю
-						// вход - две сравниваемые записи, поле по которому производится сравнение определяется
-						//переменной commandA
-	void FSA(); 	// поиск и сортировка
+	// РјРµС‚РѕРґС‹ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ Р±Р°Р·РѕР№ Р°РІС‚РѕРјРѕР±РёР»РµР№
+	void AddAuto();	    // РґРѕР±Р°РІРёС‚СЊ Р·Р°РїРёСЃСЊ
+	void NewAuto();	    // СЃРѕР·РґР°С‚СЊ Рё Р·Р°РїРѕР»РЅРёС‚СЊ Р±Р°Р·Сѓ
+	void WriteAuto();	// Р·Р°РїРёСЃР°С‚СЊ РІ Р±РёРЅР°СЂРЅС‹Р№ С„Р°Р№Р»
+	void ClearAuto();	// РІС‹РіСЂСѓР·РёС‚СЊ Р±Р°Р·Сѓ РёР· РїР°РјСЏС‚Рё
+	void ReadAuto();	// РїСЂРѕС‡РёС‚Р°С‚СЊ РёР· Р±РёРЅР°СЂРЅРѕРіРѕ С„Р°Р№Р»Р°
+	void ShowAuto();	// РѕС‚РѕР±СЂР°Р·РёС‚СЊ РІ РєРѕРЅСЃРѕР»СЊ
+	void EditAuto();	// СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ Р·Р°РїРёСЃРё РІ Р±Р°Р·Рµ
+	void DeleteAuto();	// СѓРґР°Р»РёС‚СЊ Р·Р°РїРёСЃСЊ РёР· Р±Р°Р·С‹
+	void toDoAuto();	// РІС‹Р±РѕСЂ РґРµР№СЃС‚РІРёСЏ
+	bool CompareAuto(AUTO&, AUTO&);   //  СЃСЂР°РІРЅРµРЅРёРµ РґРІСѓС… Р·Р°РїРёСЃРµР№ РїРѕ РІС‹Р±СЂР°РЅРЅРѕРјСѓ РїРѕР»СЋ
+						// РІС…РѕРґ - РґРІРµ СЃСЂР°РІРЅРёРІР°РµРјС‹Рµ Р·Р°РїРёСЃРё, РїРѕР»Рµ РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РїСЂРѕРёР·РІРѕРґРёС‚СЃСЏ СЃСЂР°РІРЅРµРЅРёРµ РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ
+						//РїРµСЂРµРјРµРЅРЅРѕР№ commandA
+	void Find_Sort_Auto(); 	// РїРѕРёСЃРє Рё СЃРѕСЂС‚РёСЂРѕРІРєР°
 
-	// аналогично для базы клиентов (B - Buyers)
-	void AddB(); // добавить запись
-	void NewB(); // создать и заполнить базу
-	void WriteB(); // записать в бинарный файл
-	void ClearB(); // выгрузить базу из памяти
-	void ReadB(); // прочитать из бинарного файла
-	void ShowB(); // отобразить в консоль
-	void EditB(); // редактировать записи в базе
-	void DeleteB(); // удалить запись из базы
-	void toDoB();  // выбор действия
-	bool ComparisonB(B&, B&); //  сравнение двух записей по выбранному полю
-						// вход - две сравниваемые записи, поле по которому производится сравнение определяется
-						//переменной commandВ
-	void Search_Base(); // поиск в базе клиентов
-
-
-	int GArrow();// работа с клавиатурой
-	int mainMenu(char** mMat, char* header, int mSize);// интерактивное меню
-	void Info(); // информация о загруженных базах
-	void findPosition();// подбор позиций для клиента
-	void inStr(char *);// чтение строки
-	void inInt(int &);// чтение целого
+	// Р°РЅР°Р»РѕРіРёС‡РЅРѕ РґР»СЏ Р±Р°Р·С‹ РєР»РёРµРЅС‚РѕРІ
+	void AddBuyer();    // РґРѕР±Р°РІРёС‚СЊ Р·Р°РїРёСЃСЊ
+	void NewBuyer();    // СЃРѕР·РґР°С‚СЊ Рё Р·Р°РїРѕР»РЅРёС‚СЊ Р±Р°Р·Сѓ
+	void WriteBuyer();  // Р·Р°РїРёСЃР°С‚СЊ РІ Р±РёРЅР°СЂРЅС‹Р№ С„Р°Р№Р»
+	void ClearBuyer();  // РІС‹РіСЂСѓР·РёС‚СЊ Р±Р°Р·Сѓ РёР· РїР°РјСЏС‚Рё
+	void ReadBuyer();   // РїСЂРѕС‡РёС‚Р°С‚СЊ РёР· Р±РёРЅР°СЂРЅРѕРіРѕ С„Р°Р№Р»Р°
+	void ShowBuyer();   // РѕС‚РѕР±СЂР°Р·РёС‚СЊ РІ РєРѕРЅСЃРѕР»СЊ
+	void EditBuyer();   // СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ Р·Р°РїРёСЃРё РІ Р±Р°Р·Рµ
+	void DeleteBuyer(); // СѓРґР°Р»РёС‚СЊ Р·Р°РїРёСЃСЊ РёР· Р±Р°Р·С‹
+	void toDoBuyer();   // РІС‹Р±РѕСЂ РґРµР№СЃС‚РІРёСЏ
+	bool CompareBuyer(BUYER&, BUYER&);  // СЃСЂР°РІРЅРµРЅРёРµ РґРІСѓС… Р·Р°РїРёСЃРµР№ РїРѕ РІС‹Р±СЂР°РЅРЅРѕРјСѓ РїРѕР»СЋ
+						// РІС…РѕРґ - РґРІРµ СЃСЂР°РІРЅРёРІР°РµРјС‹Рµ Р·Р°РїРёСЃРё, РїРѕР»Рµ РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РїСЂРѕРёР·РІРѕРґРёС‚СЃСЏ СЃСЂР°РІРЅРµРЅРёРµ РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ
+						// РїРµСЂРµРјРµРЅРЅРѕР№ commandР’
+	void FindInBase();  // РїРѕРёСЃРє РІ Р±Р°Р·Рµ РєР»РёРµРЅС‚РѕРІ
 
 
-	void cPrice(A&); // определение цены для клиента
-	int gesheft(A&);// определение прибыли фирмы от сделки
+	int GArrow();               // СЂР°Р±РѕС‚Р° СЃ РєР»Р°РІРёР°С‚СѓСЂРѕР№
+	int mMenu(char** mMat, char* header, int mSize);// РёРЅС‚РµСЂР°РєС‚РёРІРЅРѕРµ РјРµРЅСЋ
+	void Info();                // РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… Р±Р°Р·Р°С…
+	void findPosition();        // РїРѕРґР±РѕСЂ РїРѕР·РёС†РёР№ РґР»СЏ РєР»РёРµРЅС‚Р°
+	void inStr(char *);         // С‡С‚РµРЅРёРµ СЃС‚СЂРѕРєРё
+	void inInt(int &, int);     // С‡С‚РµРЅРёРµ С†РµР»РѕРіРѕ
+	void readText();
+	void customerPrice(AUTO&);  // РѕРїСЂРµРґРµР»РµРЅРёРµ С†РµРЅС‹ РґР»СЏ РєР»РёРµРЅС‚Р°
+	int profit(AUTO&);          // РѕРїСЂРµРґРµР»РµРЅРёРµ РїСЂРёР±С‹Р»Рё С„РёСЂРјС‹ РѕС‚ СЃРґРµР»РєРё
 
-	B* clientBase;// массив записей базы клиентов
-	int cbaseSize; // размер массива
+	BUYER* clientBase;  // РјР°СЃСЃРёРІ Р·Р°РїРёСЃРµР№ Р±Р°Р·С‹ РєР»РёРµРЅС‚РѕРІ
+	int clientbaseSize; // СЂР°Р·РјРµСЂ РјР°СЃСЃРёРІР°
+	AUTO* autoBase;     // РјР°СЃСЃРёРІ Р·Р°РїРёСЃРµР№ Р±Р°Р·С‹ Р°РІС‚РѕРјРѕР±РёР»РµР№
+	int autobaseSize;   // СЂР°Р·РјРµСЂ РјР°СЃСЃРёРІР°
+	int currentYear;	// С‚РµРєСѓС‰РёР№ РіРѕРґ
 
-	A* autoBase;// массив записей базы автомобилей
-	int abaseSize; // размер массива
-
-	int currentYear;	// текущий год
-
-	enum opA {
+	enum opA
+	{
 		FMOD,
 		FYEAR,
 		FVOL,
@@ -109,28 +111,63 @@ private:
 		SPRICE,
 		SYEAR,
 		EXIT
-	} commandA;  // переменная хранит выбранное пользователем действие,
-				//которое необходимо выполнить с базой автомобилей (поиск по заданному полю, сортировка)
+	} commandAuto;  // РїРµСЂРµРјРµРЅРЅР°СЏ С…СЂР°РЅРёС‚ РІС‹Р±СЂР°РЅРЅРѕРµ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј РґРµР№СЃС‚РІРёРµ,
+                    // РєРѕС‚РѕСЂРѕРµ РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹РїРѕР»РЅРёС‚СЊ СЃ Р±Р°Р·РѕР№ Р°РІС‚РѕРјРѕР±РёР»РµР№ (РїРѕРёСЃРє РїРѕ Р·Р°РґР°РЅРЅРѕРјСѓ РїРѕР»СЋ, СЃРѕСЂС‚РёСЂРѕРІРєР°)
 
-	enum opB {
+	enum opB
+	{
 		FNAMEB,
 		FMODB,
 		FPRICEB,
 		FYEARB,
 		EXIBT
-	} commandB; // переменная хранит выбранное пользователем действие,
-				//которое необходимо выполнить с базой клиентов (поиск по заданному полю, сортировка)
-
+	} commandBuyer; // РїРµСЂРµРјРµРЅРЅР°СЏ С…СЂР°РЅРёС‚ РІС‹Р±СЂР°РЅРЅРѕРµ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј РґРµР№СЃС‚РІРёРµ,
+                    // РєРѕС‚РѕСЂРѕРµ РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹РїРѕР»РЅРёС‚СЊ СЃ Р±Р°Р·РѕР№ РєР»РёРµРЅС‚РѕРІ (РїРѕРёСЃРє РїРѕ Р·Р°РґР°РЅРЅРѕРјСѓ РїРѕР»СЋ, СЃРѕСЂС‚РёСЂРѕРІРєР°)
 };
+
+void Base::readText()
+{
+	ifstream file("Р·Р°СЏРІРєР°_РїРѕСЃС‚Р°РІС‰РёРєСѓ.txt");
+	if (!file.is_open())
+	{
+		cout << "Р¤Р°Р№Р» СЃ Р·Р°СЏРІРєРѕР№ РЅРµ РѕР±РЅР°СЂСѓР¶РµРЅ" << endl;
+	}
+	else
+	{
+		cout << "РЎРѕРґРµСЂР¶РёРјРѕРµ С„Р°Р№Р»Р° \"Р·Р°СЏРІРєР°_РїРѕСЃС‚Р°РІС‰РёРєСѓ.txt\":\n " << endl;
+		char str[80];
+		while (!file.eof())
+		{
+			file.getline(str, 80);
+			cout << str << endl;
+		}
+		file.close();
+	}
+	system("pause");
+}
 
 void Base::inStr(char * outStr)
 {
-	cin.getline(outStr, 80);
+	bool tmp = false;
+	while (!tmp)
+	{
+		cin.getline(outStr, 80);
+		if (strlen(outStr) > 14)
+		{
+			tmp = false;
+			cout << "РЎС‚СЂРѕРєР° РґРѕР»Р¶РЅР° СЃРѕРґРµСЂР¶Р°С‚СЊ РЅРµ Р±РѕР»СЊС€Рµ 14 СЃРёРјРІРѕР»РѕРІ, РїРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ" << endl;
+		}
+		else
+        {
+           tmp = true;
+        }
+	}
 }
-void Base::inInt(int & outInt)
+
+void Base::inInt(int & outInt, int lstr)
 {
-	// если введенное значение в строке не отвечает формату целого
-	// atoi возвращает 0, пока 0 происходит запрос на повторный вввод.
+	// РµСЃР»Рё РІРІРµРґРµРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РІ СЃС‚СЂРѕРєРµ РЅРµ РѕС‚РІРµС‡Р°РµС‚ С„РѕСЂРјР°С‚Сѓ С†РµР»РѕРіРѕ
+	// atoi РІРѕР·РІСЂР°С‰Р°РµС‚ 0, РїРѕРєР° 0 РїСЂРѕРёСЃС…РѕРґРёС‚ Р·Р°РїСЂРѕСЃ РЅР° РїРѕРІС‚РѕСЂРЅС‹Р№ РІРІРІРѕРґ.
 
 	int tmp = 0;
 	do
@@ -138,52 +175,53 @@ void Base::inInt(int & outInt)
 		char str[80];
 		cin.getline(str, 80);
 		tmp = atoi(str);
-
 		if (tmp == 0)
         {
-            cout << "Ошибка формата, повторите ввод числа" << endl;
+            cout << "РћС€РёР±РєР° С„РѕСЂРјР°С‚Р°, РїРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ С‡РёСЃР»Р°" << endl;
         }
-
-
-	} while (tmp == 0);
+		if (strlen(str) > lstr)
+		{
+			tmp = 0;
+			cout << "Р§РёСЃР»Рѕ РЅРµ РґРѕР»Р¶РЅРѕ СЃРѕРґРµСЂР¶Р°С‚СЊ Р±РѕР»СЊС€Рµ "<<lstr<<" Р·РЅР°РєРѕРІ"<< endl;
+		}
+	} while (tmp==0);
 
 	outInt = tmp;
 }
 
-void Base::cPrice(A &x)
+void Base::customerPrice(AUTO &x)
 {
 	int old = currentYear - x.year;
-	double ras = 0;
+	double CustomClearance = 0;
 
 	if (old <= 3)
     {
-        ras = 0.6 * x.volume;
+        CustomClearance = 0.6 * x.volume;
     }
-    if (old > 3 && old <= 10)
+	if (old > 3 && old <= 10)
 	{
-		if (x.volume < 2500)
+		if(x.volume < 2500)
         {
-            ras = 0.35 * x.volume;
+            CustomClearance = 0.35 * x.volume;
         }
 		else
         {
-			ras = 0.6 * x.volume;
+            CustomClearance = 0.6 * x.volume;
         }
 	}
 	if (old > 10 && old < 14)
-	{
-            ras = 0.6 * x.volume;
-	}
-
+    {
+        CustomClearance = 0.6 * x.volume;
+    }
 	if(old >= 14)
     {
-        ras = 2.0 * x.volume;
+        CustomClearance = 2.0 * x.volume;
     }
-	x.priseout = (int)((double)x.price + 250.0 + ras) * 1.15;
 
+	x.priseout = (int)((double)x.price + 250.0 + CustomClearance) * 1.15;
 }
 
-int Base::gesheft(A & x)
+int Base::profit(AUTO & x)
 {
 	return (int)((double)x.priseout - (double)x.priseout / 1.15);
 }
@@ -191,112 +229,139 @@ int Base::gesheft(A & x)
 void Base::findPosition()
 {
 	if (!clientBase || !autoBase)
-        {
-            cout << " Не определены базы для поиска " << endl;
-            system("pause");
-            return;
-        }
+    {
+        cout << " РќРµ РѕРїСЂРµРґРµР»РµРЅС‹ Р±Р°Р·С‹ РґР»СЏ РїРѕРёСЃРєР° " << endl;
+        system("pause");
+        return;
+    }
 
+	//РёРЅРґРµРєСЃ РјР°СЃСЃРёРІРµ, РёРЅРґРµРєСЃ СѓРєР°Р·С‹РІР°РµС‚ РЅР° РјР°С€РёРЅСѓ РґР»СЏ
+	//РєРѕС‚РѕСЂРѕР№ СЃС„РѕСЂРјРёСЂРѕРІР°РЅР° Р·Р°СЏРІРєР° РїРѕСЃС‚Р°РІС‰РёРєСѓ, СЌР»РµРјРµРЅС‚ РјР°СЃСЃРёРІР° СѓРґР°Р»СЏРµС‚СЃСЏ.
+	int deli = -1;
 
-	// формирование меню из списка клиентов
-	char** clientbaseList = new char*[cbaseSize];
-	for (int i = 0; i < cbaseSize; i++)
-		clientbaseList[i] = clientBase[i].Full_name;
+	// С„РѕСЂРјРёСЂРѕРІР°РЅРёРµ РјРµРЅСЋ РёР· СЃРїРёСЃРєР° РєР»РёРµРЅС‚РѕРІ
+	char** clientbaseList = new char*[clientbaseSize];
+	for (int i = 0; i < clientbaseSize; i++)
+    {
+        clientbaseList[i] = clientBase[i].FullName;
+    }
 
-	// идентификатор выбранного в меню клиента
-	int id = mainMenu(clientbaseList, "\tУкажите клиента, для которого будет выполнен подбор\n\n", cbaseSize);
+	// РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РІС‹Р±СЂР°РЅРЅРѕРіРѕ РІ РјРµРЅСЋ РєР»РёРµРЅС‚Р°
+	int id = mMenu(clientbaseList, "\tРЈРєР°Р¶РёС‚Рµ РєР»РёРµРЅС‚Р°, РґР»СЏ РєРѕС‚РѕСЂРѕРіРѕ Р±СѓРґРµС‚ РІС‹РїРѕР»РЅРµРЅ РїРѕРґР±РѕСЂ\n\n", clientbaseSize);
 
-	// число позиций в списке базы автомобилей, которые соответствуют запросам клиента
+	// С‡РёСЃР»Рѕ РїРѕР·РёС†РёР№ РІ СЃРїРёСЃРєРµ Р±Р°Р·С‹ Р°РІС‚РѕРјРѕР±РёР»РµР№, РєРѕС‚РѕСЂС‹Рµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‚ Р·Р°РїСЂРѕСЃР°Рј РєР»РёРµРЅС‚Р°
 	int posCount = 0;
 
-	cout << "Клиенту подходят следующие позиции:" << endl;
+	cout << "РљР»РёРµРЅС‚Сѓ РїРѕРґС…РѕРґСЏС‚ СЃР»РµРґСѓСЋС‰РёРµ РїРѕР·РёС†РёРё:" << endl;
 
-	// вывод на экран найденных позиций
-	for (int i = 0; i < abaseSize; i++)
-		if ((strcmp(autoBase[i].type, clientBase[id].type) == 0)&&(autoBase[i].priseout<= clientBase[id].price) && (autoBase[i].year >= clientBase[id].year))
+	// РІС‹РІРѕРґ РЅР° СЌРєСЂР°РЅ РЅР°Р№РґРµРЅРЅС‹С… РїРѕР·РёС†РёР№
+	for (int i = 0; i < autobaseSize; i++)
+    {
+		if ((strcmp(autoBase[i].type, clientBase[id].type) == 0) && (autoBase[i].priseout <= clientBase[id].price) && (autoBase[i].year >= clientBase[id].year))
 		{
 			posCount++;
-			cout << "\nЗапись:\t" << i + 1 << "\n\tМодель:\t\t" << autoBase[i].type << "\n\tОбъем:\t\t" << autoBase[i].volume << "\n\tГод:\t\t" << autoBase[i].year << "\n\tБазовая цена:\t" << autoBase[i].price << "\n\tИтоговая цена:\t" << autoBase[i].priseout <<"\n\tПрибыль:\t"<<gesheft(autoBase[i])<< endl;
+			cout << "\nР—Р°РїРёСЃСЊ:\t" << i + 1 << "\n\tРњРѕРґРµР»СЊ:\t\t" << autoBase[i].type << "\n\tРћР±СЉРµРј:\t\t" << autoBase[i].volume << "\n\tР“РѕРґ:\t\t" << autoBase[i].year << "\n\tР‘Р°Р·РѕРІР°СЏ С†РµРЅР°:\t" << autoBase[i].price << "\n\tРС‚РѕРіРѕРІР°СЏ С†РµРЅР°:\t" << autoBase[i].priseout <<"\n\tРџСЂРёР±С‹Р»СЊ:\t"<<profit(autoBase[i])<< endl;
 		}
-
-
-	if (posCount == 0) // если позиции не найдены вывыод сообщения
+    }
+    
+    // РµСЃР»Рё РїРѕР·РёС†РёРё РЅРµ РЅР°Р№РґРµРЅС‹ РІС‹РІС‹РѕРґ СЃРѕРѕР±С‰РµРЅРёСЏ
+	if (posCount == 0)  
 	{
-        cout << "подходящих записей не найдено:" << endl;
-        cout << endl;
-        system("pause");
+	cout << "РїРѕРґС…РѕРґСЏС‰РёС… Р·Р°РїРёСЃРµР№ РЅРµ РЅР°Р№РґРµРЅРѕ:" << endl;
+	cout << endl;
+	system("pause");
 	}
 	else
 	{
 		cout << endl;
 		system("pause");
 
-		// задание меню "да" "нет" сформировать заявку поставщику
-		char* yn[2];
-		yn[0] = " Да";
-		yn[1] = " Нет";
-		int m = mainMenu(yn, "\tСформировать заявку для поставщика ?\n\n", 2);
+		// Р·Р°РґР°РЅРёРµ РјРµРЅСЋ "РґР°" "РЅРµС‚" СЃС„РѕСЂРјРёСЂРѕРІР°С‚СЊ Р·Р°СЏРІРєСѓ РїРѕСЃС‚Р°РІС‰РёРєСѓ
+		char* yesNo[2];
+		yesNo[0] = " Р”Р°";
+		yesNo[1] = " РќРµС‚";
 
-		if (m == 0)  // сформировать заявку
+		//РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ, С…СЂР°РЅРёС‚ РѕС‚РІРµС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ (РґР°, РЅРµС‚, РѕС‚РјРµРЅР°), РїРѕР»СѓС‡РµРЅРЅС‹Р№ РїСЂРё СЂР°Р±РѕС‚Рµ С„СѓРЅРєС†РёРё РјРµРЅСЋ.
+		int m = mMenu(yesNo, "\tРЎС„РѕСЂРјРёСЂРѕРІР°С‚СЊ Р·Р°СЏРІРєСѓ РґР»СЏ РїРѕСЃС‚Р°РІС‰РёРєР° ?\n\n", 2);
+        
+        // СЃС„РѕСЂРјРёСЂРѕРІР°С‚СЊ Р·Р°СЏРІРєСѓ
+		if (m == 0)  
 		{
-
-			// массив строк меню, описывающие найденные позиции
+			// РјР°СЃСЃРёРІ СЃС‚СЂРѕРє РјРµРЅСЋ, РѕРїРёСЃС‹РІР°СЋС‰РёРµ РЅР°Р№РґРµРЅРЅС‹Рµ РїРѕР·РёС†РёРё
 			char** foundposList = new char*[posCount];
-
 			int j = 0;
-
-			for (int i = 0; i < abaseSize; i++)
+			for (int i = 0; i < autobaseSize; i++)
 			{
 				if ((strcmp(autoBase[i].type, clientBase[id].type) == 0) && (autoBase[i].priseout <= clientBase[id].price) && (autoBase[i].year >= clientBase[id].year))
 				{
-					foundposList[j] = new char[200];  // новая строка меню
+				    // РЅРѕРІР°СЏ СЃС‚СЂРѕРєР° РјРµРЅСЋ
+					foundposList[j] = new char[200];  
 					foundposList[j][0] = '\0';
 
-					//форматированная запись в строку
-					sprintf(foundposList[j], "Модель: %s Цена: %d Год: %d", autoBase[i].type, autoBase[i].priseout, autoBase[i].year);
+					//С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРЅР°СЏ Р·Р°РїРёСЃСЊ РІ СЃС‚СЂРѕРєСѓ
+					sprintf(foundposList[j], "РњРѕРґРµР»СЊ: %s Р¦РµРЅР°: %d Р“РѕРґ: %d", autoBase[i].type, autoBase[i].priseout, autoBase[i].year);
 					j++;
 				}
 			}
 
-			// идентификатор выбранной позиции для формирования заявки
-			int k = mainMenu(foundposList, "\tУкажите выбранную позицию для отправки поставщику \n\n", posCount);
-
-			ofstream fout("заявка_поставщику.txt");
-
+			// РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РІС‹Р±СЂР°РЅРЅРѕР№ РїРѕР·РёС†РёРё РґР»СЏ С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°СЏРІРєРё
+			//РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ, С…СЂР°РЅРёС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РІС‹Р±СЂР°РЅРЅРѕР№
+			//РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј РїРѕР·РёС†Рё РІ РјРµРЅСЋ РёР· РїРѕРґС…РѕРґСЏС‰РёС… РІР°СЂРёР°РЅС‚РѕРІ РґР»СЏ С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°СЏРІРєРё РїРѕСЃС‚Р°РІС‰РёРєСѓ
+			int k = mMenu(foundposList, "\tРЈРєР°Р¶РёС‚Рµ РІС‹Р±СЂР°РЅРЅСѓСЋ РїРѕР·РёС†РёСЋ РґР»СЏ РѕС‚РїСЂР°РІРєРё РїРѕСЃС‚Р°РІС‰РёРєСѓ \n\n", posCount);
+			ofstream fout("Р·Р°СЏРІРєР°_РїРѕСЃС‚Р°РІС‰РёРєСѓ.txt");
 			int count = 0;
 
-			// формирование заявки и вывод в файл
-			for (int i = 0; i < abaseSize; i++)
-
+			// С„РѕСЂРјРёСЂРѕРІР°РЅРёРµ Р·Р°СЏРІРєРё Рё РІС‹РІРѕРґ РІ С„Р°Р№Р»
+			for (int i = 0; i < autobaseSize; i++)
+            {
 				if (strcmp(autoBase[i].type, clientBase[id].type) == 0)
 				{
-					if(count ==k)
-					fout << "\nФИО заказчика:\t\t"<< clientBase[id].Full_name << "\nПозиция:\t"<< "\n\tМодель:\t\t" << autoBase[i].type << "\n\tОбъем:\t\t" << autoBase[i].volume << "\n\tГод:\t\t" << autoBase[i].year << "\n\tБазовая цена:\t" << autoBase[i].price << "\n\tИтоговая цена:\t" << autoBase[i].priseout << "\n\tПрибыль:\t" << gesheft(autoBase[i]) << endl;
+					if (count == k)
+					{
+						deli = i;
+						fout << "\nР¤РРћ Р·Р°РєР°Р·С‡РёРєР°:\t\t" << clientBase[id].FullName << "\nРџРѕР·РёС†РёСЏ:\t" << "\n\tРњРѕРґРµР»СЊ:\t\t" << autoBase[i].type << "\n\tРћР±СЉРµРј:\t\t" << autoBase[i].volume << "\n\tР“РѕРґ:\t\t" << autoBase[i].year << "\n\tР‘Р°Р·РѕРІР°СЏ С†РµРЅР°:\t" << autoBase[i].price << "\n\tРС‚РѕРіРѕРІР°СЏ С†РµРЅР°:\t" << autoBase[i].priseout << "\n\tРџСЂРёР±С‹Р»СЊ:\t" << profit(autoBase[i]) << endl;
+					}
 					count++;
 				}
-
+            }
 			fout.close();
-
 			for (int i = 0; i < posCount; i++)
-				delete[]foundposList[i];
+            {
+                delete[]foundposList[i];
+            }
 			delete[]foundposList;
 		}
-
 	}
+	
 	delete[]clientbaseList;
+	
+	if (deli != -1)
+	{
+		int j = 0;
+		AUTO* Temp = new AUTO[autobaseSize - 1];
+		for (int i = 0; i < autobaseSize; i++)
+		{
+			if (deli != i)
+			{
+				Temp[j] = autoBase[i];
+				j++;
+			}
+		}
+		delete[]autoBase;
+		autoBase = Temp;
+		autobaseSize--;
+	}
 }
 
 int Base::GArrow()
 {
 	unsigned char key = _getch();
-
 	if (key == 224)
 	{
 		key = _getch();
-
 		if (key == 72)
         {
-           return 1;
+            return 1;
         }
 		if (key == 80)
         {
@@ -304,6 +369,7 @@ int Base::GArrow()
         }
 	}
 	else
+    {
 		if (key == 13)
         {
             return 2;
@@ -312,10 +378,10 @@ int Base::GArrow()
         {
             return 100;
         }
-
+    }
 }
 
-int Base::mainMenu(char ** mMat, char * header, int mSize)
+int Base::mMenu(char ** mMat, char * header, int mSize)
 {
 	int cursor = 0;
 	while (1)
@@ -326,23 +392,29 @@ int Base::mainMenu(char ** mMat, char * header, int mSize)
 		for (i = 0; i < mSize; i++)
 		{
 			if (cursor == i)
-				cout << "---> " << mMat[i] << endl;  // форматирование строки совпадающей текущим пунктом
+            {
+                // С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё СЃРѕРІРїР°РґР°СЋС‰РµР№ С‚РµРєСѓС‰РёРј РїСѓРЅРєС‚РѕРј
+				cout << "---> " << mMat[i] << endl;
+            }  
 			else
-				cout << "    " << mMat[i] << endl;  //  форматирование прочих строк меню
+            {
+                //  С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёРµ РїСЂРѕС‡РёС… СЃС‚СЂРѕРє РјРµРЅСЋ
+                cout << "    " << mMat[i] << endl;  
+            }
 		}
-
 		int key = GArrow();
-
 		if (key == 0)
         {
-            cursor = ++cursor%mSize;
+            cursor = ++cursor % mSize;
         }
 		if (key == 1)
 		{
+			// РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ, РЅСѓР¶РЅР° РґР»СЏ РѕСЂРіР°РЅРёР·Р°С†РёРё
+			//"Р·Р°РєРѕР»СЊС†РѕРІС‹РІР°РЅРёСЏ" РєСѓСЂСЃРѕСЂР° РїСЂРё РїСЂРѕС…РѕРґРµ РїРѕ РїСѓРЅРєС‚Р°Рј РјРµРЅСЋ
 			int ts = cursor;
-			if (--ts%mSize < 0)
+			if (--ts%mSize<0)
             {
-                cursor = mSize - 2 - (--cursor%mSize);
+				cursor = mSize - 2 - (--cursor % mSize);
             }
 			else
             {
@@ -357,189 +429,190 @@ int Base::mainMenu(char ** mMat, char * header, int mSize)
 	}
 }
 
-void Base::NewB()
+void Base::NewBuyer()
 {
-	ClearB();
-	cout << "Создание новой базы клиентов" << endl;
-	cout << "введите размер базы: M= ";
-	inInt(cbaseSize);
-	clientBase = new B[cbaseSize];
-	for (int i = 0; i < cbaseSize; i++)
+	ClearBuyer();
+	cout << "РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕР№ Р±Р°Р·С‹ РєР»РёРµРЅС‚РѕРІ" << endl;
+	cout << "РІРІРµРґРёС‚Рµ СЂР°Р·РјРµСЂ Р±Р°Р·С‹: M= ";
+	inInt(clientbaseSize,10);
+	clientBase = new BUYER[clientbaseSize];
+	for (int i = 0; i < clientbaseSize; i++)
 	{
-		cout << "Введите ФИО: " << endl;
-		inStr(clientBase[i].Full_name);
-		cout << "Введите желаемую модель: "<<endl;
+		cout << "Р’РІРµРґРёС‚Рµ Р¤РРћ: " << endl;
+		inStr(clientBase[i].FullName);
+		cout << "Р’РІРµРґРёС‚Рµ Р¶РµР»Р°РµРјСѓСЋ РјРѕРґРµР»СЊ: "<<endl;
 		inStr(clientBase[i].type);
-		cout << "Введите год производства: ";
-		inInt(clientBase[i].year);
-		cout << "Введите граничную стоимость: ";
-		inInt(clientBase[i].price);
+		cout << "Р’РІРµРґРёС‚Рµ РіРѕРґ РїСЂРѕРёР·РІРѕРґСЃС‚РІР°: ";
+		inInt(clientBase[i].year,5);
+		cout << "Р’РІРµРґРёС‚Рµ РіСЂР°РЅРёС‡РЅСѓСЋ СЃС‚РѕРёРјРѕСЃС‚СЊ: ";
+		inInt(clientBase[i].price,8);
 		cout << endl;
 	}
 }
 
-void Base::ClearB()//rty
+void Base::ClearBuyer()
 {
 	if (!clientBase)
-	{
-	    return;
-	}
+    {
+        return;
+    }
 	delete[] clientBase;
 	clientBase = 0;
-	cbaseSize = 0;
+	clientbaseSize = 0;
 }
 
-void Base::WriteB()
+void Base::WriteBuyer()
 {
 	if (!clientBase)
     {
-        cout << " База клиентов отсутствует " << endl;
+        cout << " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ " << endl;
         system("pause");
         return;
     }
-	ofstream f("client.dat", ios::binary | ios::out); // f - объект класса ofstream, используется для записи в файл
-	f << cbaseSize;
-	f.write((char*)clientBase, cbaseSize*(sizeof(B)));
-	cout << " База клиентов записана успешно " << endl; system("pause");
+	ofstream f("client.dat", ios::binary | ios::out);
+	f << clientbaseSize;
+	f.write((char*)clientBase, clientbaseSize*(sizeof(BUYER)));
+	cout << " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ Р·Р°РїРёСЃР°РЅР° СѓСЃРїРµС€РЅРѕ " << endl; system("pause");
 }
 
-void Base::ShowB()
+void Base::ShowBuyer()
 {
 	if (!clientBase)
-    {   cout << " База клиентов отсутствует " << endl;
+    {
+        cout << " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ " << endl;
         system("pause");
         return;
     }
-	cout << "База клиентов:" << endl;
-	for (int i = 0; i < cbaseSize; i++)//rty
+	cout << "Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ:" << endl;
+	for (int i = 0; i < clientbaseSize; i++)
     {
-       cout << "\nЗапись:\t" << i + 1 << "\n\tФИО:\t\t" << clientBase[i].Full_name << "\n\tМодель:\t\t" << clientBase[i].type << "\n\tГод:\t\t" << clientBase[i].year << "\n\tГр.цена:\t" << clientBase[i].price << endl;
-	}
+		cout << "\nР—Р°РїРёСЃСЊ:\t" << i + 1 << "\n\tР¤РРћ:\t\t" << clientBase[i].FullName << "\n\tРњРѕРґРµР»СЊ:\t\t" << clientBase[i].type << "\n\tР“РѕРґ:\t\t" << clientBase[i].year << "\n\tР“СЂ.С†РµРЅР°:\t" << clientBase[i].price << endl;
+    }
 	cout << endl;
 	system("pause");
 }
 
-void Base::ReadB()
+void Base::ReadBuyer()
 {
-	ClearB();
-	ifstream in("client.dat", ios::binary | ios::in); //in - объект класса ifstream, используется для чтения из файла.
-	in >> cbaseSize;
-	clientBase = new B[cbaseSize];
-	in.read((char*)clientBase, cbaseSize*(sizeof(B)));
-	cout << " База клиентов загружена успешно " << endl;
+	ClearBuyer();
+	ifstream in("client.dat", ios::binary | ios::in);
+	in >> clientbaseSize;
+	clientBase = new BUYER[clientbaseSize];
+	in.read((char*)clientBase, clientbaseSize*(sizeof(BUYER)));
+	cout << " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ Р·Р°РіСЂСѓР¶РµРЅР° СѓСЃРїРµС€РЅРѕ " << endl;
 	system("pause");
 }
 
-void Base::EditB()
+void Base::EditBuyer()
 {
-
 	if (!clientBase)
     {
-        cout << " База клиентов отсутствует " << endl;
+        cout << " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ " << endl;
         system("pause");
         return;
     }
-
-	char** clientbaseList = new char*[cbaseSize];
-
-	for (int i = 0; i < cbaseSize; i++)
+	char** clientbaseList = new char*[clientbaseSize];
+	for (int i = 0; i < clientbaseSize; i++)
     {
-       clientbaseList[i] = clientBase[i].Full_name;
+			clientbaseList[i] = clientBase[i].FullName;
     }
+	int i = mMenu(clientbaseList, "\tР’С‹Р±РµСЂРёС‚Рµ РєР»РёРµРЅС‚Р° РґР»СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ Р·Р°РїРёСЃРё\n\n", clientbaseSize);
 
-	int i = mainMenu(clientbaseList, "\tВыберите клиента для редактирования записи\n\n", cbaseSize);
-
-		cout << "Выбранная запись: " << endl;
-		cout << "\nЗапись:\t" << i + 1 << "\n\tФИО:\t\t" << clientBase[i].Full_name << "\n\tМодель:\t\t" << clientBase[i].type << "\n\tГод:\t\t" << clientBase[i].year << "\n\tГр.цена:\t" << clientBase[i].price << endl;
+		cout << "Р’С‹Р±СЂР°РЅРЅР°СЏ Р·Р°РїРёСЃСЊ: " << endl;
+		cout << "\nР—Р°РїРёСЃСЊ:\t" << i + 1 << "\n\tР¤РРћ:\t\t" << clientBase[i].FullName << "\n\tРњРѕРґРµР»СЊ:\t\t" << clientBase[i].type << "\n\tР“РѕРґ:\t\t" << clientBase[i].year << "\n\tР“СЂ.С†РµРЅР°:\t" << clientBase[i].price << endl;
 		cout << endl;
-		cout << "Введите новое ФИО: " << endl;
-		inStr(clientBase[i].Full_name);
-		cout << "Введите новую модель: ";
+		cout << "Р’РІРµРґРёС‚Рµ РЅРѕРІРѕРµ Р¤РРћ: " << endl;
+		inStr(clientBase[i].FullName);
+		cout << "Р’РІРµРґРёС‚Рµ РЅРѕРІСѓСЋ РјРѕРґРµР»СЊ: ";
 		cout << endl;
 		inStr(clientBase[i].type);
-		cout << "Введите новый год производства: ";
-		inInt(clientBase[i].year);
-		cout << "Введите новую граничную стоимость: ";
-		inInt(clientBase[i].price);
+		cout << "Р’РІРµРґРёС‚Рµ РЅРѕРІС‹Р№ РіРѕРґ РїСЂРѕРёР·РІРѕРґСЃС‚РІР°: ";
+		inInt(clientBase[i].year,5);
+		cout << "Р’РІРµРґРёС‚Рµ РЅРѕРІСѓСЋ РіСЂР°РЅРёС‡РЅСѓСЋ СЃС‚РѕРёРјРѕСЃС‚СЊ: ";
+		inInt(clientBase[i].price,8);
 		cout << endl;
 
 	delete[]clientbaseList;
 }
 
-void Base::AddB()
+void Base::AddBuyer()
 {
 	if (!clientBase)
     {
-        cout << " База клиентов отсутствует " << endl;
+        cout << " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ " << endl;
         system("pause");
         return;
     }
-
-	B* Temp = new B[cbaseSize + 1];
-	for (int i = 0; i < cbaseSize; i++)
+    
+	BUYER* Temp = new BUYER[clientbaseSize + 1];
+	
+	for (int i = 0; i < clientbaseSize; i++)
     {
         Temp[i] = clientBase[i];
     }
+    
 	delete[]clientBase;
-
 	clientBase = Temp;
 
-	cout << "Добавление новой записи в клиентскую базу: " << endl;
-	cout << "Введите ФИО: " << endl;
-	inStr(clientBase[cbaseSize].Full_name);
-	cout << "Введите желаемую модель: ";
+	cout << "Р”РѕР±Р°РІР»РµРЅРёРµ РЅРѕРІРѕР№ Р·Р°РїРёСЃРё РІ РєР»РёРµРЅС‚СЃРєСѓСЋ Р±Р°Р·Сѓ: " << endl;
+	cout << "Р’РІРµРґРёС‚Рµ Р¤РРћ: " << endl;
+	inStr(clientBase[clientbaseSize].FullName);
+	cout << "Р’РІРµРґРёС‚Рµ Р¶РµР»Р°РµРјСѓСЋ РјРѕРґРµР»СЊ: ";
 	cout << endl;
-	inStr(clientBase[cbaseSize].type);
-	cout << "Введите год производства: ";
-	inInt(clientBase[cbaseSize].year);
-	cout << "Введите граничную стоимость: ";
-	inInt(clientBase[cbaseSize].price);
+	inStr(clientBase[clientbaseSize].type);
+	cout << "Р’РІРµРґРёС‚Рµ РіРѕРґ РїСЂРѕРёР·РІРѕРґСЃС‚РІР°: ";
+	inInt(clientBase[clientbaseSize].year,5);
+	cout << "Р’РІРµРґРёС‚Рµ РіСЂР°РЅРёС‡РЅСѓСЋ СЃС‚РѕРёРјРѕСЃС‚СЊ: ";
+	inInt(clientBase[clientbaseSize].price,8);
 	cout << endl;
-	cbaseSize++;
+	clientbaseSize++;
 }
 
-void Base::DeleteA()
+void Base::DeleteAuto()
 {
 	if (!autoBase)
     {
-        cout << " База автомобилей отсутствует " << endl;
+        cout << " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ " << endl;
         system("pause");
         return;
     }
-	if (abaseSize == 1)
+	if (autobaseSize == 1)
 	{
-		ClearA();
+		ClearAuto();
 	}
 	else
 	{
-		// список строк меню, идентифицирующих записи в базе автомобилей
-		char** abaseList = new char*[abaseSize];
-		for (int i = 0; i < abaseSize; i++)
+		// СЃРїРёСЃРѕРє СЃС‚СЂРѕРє РјРµРЅСЋ, РёРґРµРЅС‚РёС„РёС†РёСЂСѓСЋС‰РёС… Р·Р°РїРёСЃРё РІ Р±Р°Р·Рµ Р°РІС‚РѕРјРѕР±РёР»РµР№
+		char** abaseList = new char*[autobaseSize];
+		for (int i = 0; i < autobaseSize; i++)
 		{
 			abaseList[i] = new char[100];
 			abaseList[i][0] = '\0';
 
 			char cost[20];
-			char Twelvemonth[20];
+			char annum[20];
 			sprintf(cost, "%d", autoBase[i].priseout);
-			sprintf(Twelvemonth, "%d", autoBase[i].year);
+			sprintf(annum, "%d", autoBase[i].year);
 
 			strcat(abaseList[i], autoBase[i].type);
-			strcat(abaseList[i], " Цена: ");
+			strcat(abaseList[i], " Р¦РµРЅР°: ");
 			strcat(abaseList[i], cost);
-			strcat(abaseList[i], " Год: ");
-			strcat(abaseList[i], Twelvemonth);
+			strcat(abaseList[i], " Р“РѕРґ: ");
+			strcat(abaseList[i], annum);
 		}
 
-		// выбор записи
-		int id = mainMenu(abaseList, "\tВыберите запись для удаления\n\n", abaseSize);
+		// РІС‹Р±РѕСЂ Р·Р°РїРёСЃРё
+		int id = mMenu(abaseList, "\tР’С‹Р±РµСЂРёС‚Рµ Р·Р°РїРёСЃСЊ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ\n\n", autobaseSize);
 
+        //РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ j, РЅСѓР¶РЅР° РґР»СЏ РѕСЂРіР°РЅРёР·Р°С†РёРё СѓРґР°Р»РµРЅРёСЏ СЌР»РµРјРµРЅС‚Р°
+        //РёР· Р±Р°Р·С‹, РїСЂРµРґСЃС‚Р°РІР»СЏРµС‚ СЃРѕР±РѕР№ РёРЅРґРµРєСЃ РЅРѕРІРѕРіРѕ РјР°СЃСЃРёРІР°, СѓРєР°Р·С‹РІР°РµС‚ РЅР°
+        //С‚РµРєСѓС‰СѓСЋ РїРѕР·РёС†РёСЋ, РєСѓРґР° РїСЂРѕРёР·РІРѕРґРёС‚СЊ РєРѕРїРёСЂРѕРІР°РЅРёРµ Р·Р°РїРёСЃРё РёР· С‚РµРєСѓС‰РµРіРѕ РјР°СЃСЃРёРІР°
 		int j  =  0;
 
-		// удаление выбранной записи
-		A* Temp = new A[abaseSize - 1];
+		// СѓРґР°Р»РµРЅРёРµ РІС‹Р±СЂР°РЅРЅРѕР№ Р·Р°РїРёСЃРё
+		AUTO* Temp = new AUTO[autobaseSize - 1];
 
-		for (int i = 0; i < abaseSize; i++)
+		for (int i = 0; i < autobaseSize; i++)
 		{
 			if (id != i)
 			{
@@ -548,49 +621,48 @@ void Base::DeleteA()
 			}
 		}
 
-		delete[]autoBase;	autoBase = Temp;
+		delete[]autoBase;
+		autoBase = Temp;
 
-		for (int i = 0; i < abaseSize; i++)
+		for (int i = 0; i < autobaseSize; i++)
         {
             delete[]abaseList[i];
         }
 
 		delete[]abaseList;
 
-		abaseSize--;
+		autobaseSize--;
 	}
 }
 
-void Base::DeleteB()
+void Base::DeleteBuyer()
 {
-
 	if (!clientBase)
     {
-        cout << " База клиентов отсутствует " << endl;
+        cout << " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ " << endl;
         system("pause");
         return;
     }
-	if (cbaseSize == 1)
+	if (clientbaseSize == 1)
 	{
-		ClearB();
+		ClearBuyer();
 	}
 	else
 	{
-		// определение строк меню с фамилиями клиентов
-		char** clientbaseList = new char*[cbaseSize];
-		for (int i = 0; i < cbaseSize; i++)
+		// РѕРїСЂРµРґРµР»РµРЅРёРµ СЃС‚СЂРѕРє РјРµРЅСЋ СЃ С„Р°РјРёР»РёСЏРјРё РєР»РёРµРЅС‚РѕРІ
+		char** clientbaseList = new char*[clientbaseSize];
+		for (int i = 0; i < clientbaseSize; i++)
         {
-            clientbaseList[i] = clientBase[i].Full_name;
+            clientbaseList[i] = clientBase[i].FullName;
         }
 
-		int id = mainMenu(clientbaseList, "\tВыберите запись для удаления\n\n", cbaseSize);
+		int id = mMenu(clientbaseList, "\tР’С‹Р±РµСЂРёС‚Рµ Р·Р°РїРёСЃСЊ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ\n\n", clientbaseSize);
 
-
-		// удаление записи из массива
+		// СѓРґР°Р»РµРЅРёРµ Р·Р°РїРёСЃРё РёР· РјР°СЃСЃРёРІР°
 		int j = 0;
-		B* Temp = new B[cbaseSize - 1];
+		BUYER* Temp = new BUYER[clientbaseSize - 1];
 
-		for (int i = 0; i < cbaseSize; i++)
+		for (int i = 0; i < clientbaseSize; i++)
 		{
 			if (id != i)
 			{
@@ -599,167 +671,167 @@ void Base::DeleteB()
 			}
 		}
 
-		delete[]clientBase;	clientBase = Temp;
+		delete[]clientBase;
+		clientBase = Temp;
 
 		delete[]clientbaseList;
-		cbaseSize--;
+		clientbaseSize--;
 	}
 }
 
-void Base::AddA()
+void Base::AddAuto()
 {
 	if (!autoBase)
     {
-        cout << " База автомобилей отсутствует " << endl;
+        cout << " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ " << endl;
         system("pause");
         return;
     }
 
-		A* Temp = new A[abaseSize + 1];
-		for (int i = 0; i < abaseSize; i++)
-		{
-		    Temp[i] = autoBase[i];
-		}
+		AUTO* Temp = new AUTO[autobaseSize + 1];
+		for (int i = 0; i < autobaseSize; i++)
+        {
+            Temp[i] = autoBase[i];
+        }
 
-		delete[]autoBase;	autoBase = Temp;
-		cout << "Добавление новой записи в базу автомобилей: " << endl;
-		cout << "Название модели: " << endl;
-		inStr(autoBase[abaseSize].type);
-		cout << "Год производства: ";
-		inInt(autoBase[abaseSize].year);
-		cout << "Объем двигателя: ";
-		inInt(autoBase[abaseSize].volume);
-		cout << "Базовая цена: ";
-		inInt(autoBase[abaseSize].price);
+		delete[]autoBase;
+		autoBase = Temp;
+		cout << "Р”РѕР±Р°РІР»РµРЅРёРµ РЅРѕРІРѕР№ Р·Р°РїРёСЃРё РІ Р±Р°Р·Сѓ Р°РІС‚РѕРјРѕР±РёР»РµР№: " << endl;
+		cout << "РќР°Р·РІР°РЅРёРµ РјРѕРґРµР»Рё: " << endl;
+		inStr(autoBase[autobaseSize].type);
+		cout << "Р“РѕРґ РїСЂРѕРёР·РІРѕРґСЃС‚РІР°: ";
+		inInt(autoBase[autobaseSize].year,5);
+		cout << "РћР±СЉРµРј РґРІРёРіР°С‚РµР»СЏ: ";
+		inInt(autoBase[autobaseSize].volume,5);
+		cout << "Р‘Р°Р·РѕРІР°СЏ С†РµРЅР°: ";
+		inInt(autoBase[autobaseSize].price,8);
 		cout << endl;
 
-		cPrice(autoBase[abaseSize]);
-		abaseSize++;
+		customerPrice(autoBase[autobaseSize]);
+		autobaseSize++;
 }
 
-void Base::NewA()
+void Base::NewAuto()
 {
-
-	ClearA();
-	cout << "Создание новой базы автомобилей" << endl;
-	cout << "Введите размер базы: N= ";
-	inInt(abaseSize);
-	autoBase = new A[abaseSize];
-	for (int i = 0; i < abaseSize; i++)
+	ClearAuto();
+	cout << "РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕР№ Р±Р°Р·С‹ Р°РІС‚РѕРјРѕР±РёР»РµР№" << endl;
+	cout << "Р’РІРµРґРёС‚Рµ СЂР°Р·РјРµСЂ Р±Р°Р·С‹: N= ";
+	inInt(autobaseSize,10);
+	autoBase = new AUTO[autobaseSize];
+	for (int i = 0; i < autobaseSize; i++)
 	{
-		cout << "Название модели: " << endl;
+		cout << "РќР°Р·РІР°РЅРёРµ РјРѕРґРµР»Рё: " << endl;
 		inStr(autoBase[i].type);
-		cout << "Год производства: ";
-		inInt(autoBase[i].year);
-		cout << "Объем двигателя: ";
-		inInt(autoBase[i].volume);
-		cout << "Базовая цена: ";
-		inInt(autoBase[i].price);
+		cout << "Р“РѕРґ РїСЂРѕРёР·РІРѕРґСЃС‚РІР°: ";
+		inInt(autoBase[i].year,5);
+		cout << "РћР±СЉРµРј РґРІРёРіР°С‚РµР»СЏ: ";
+		inInt(autoBase[i].volume,5);
+		cout << "Р‘Р°Р·РѕРІР°СЏ С†РµРЅР°: ";
+		inInt(autoBase[i].price,8);
 		cout << endl;
 
-		cPrice(autoBase[i]);
+		customerPrice(autoBase[i]);
 	}
-
 }
 
-void Base::WriteA()
+void Base::WriteAuto()
 {
 	if (!autoBase)
     {
-        cout << " База автомобилей отсутствует " << endl;
+        cout << " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ " << endl;
         system("pause");
         return;
     }
+		// f - С„Р°Р№Р»РѕРІР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ Р·Р°РїРёСЃРё Р±Р°Р·С‹ Р°РІС‚РѕРјРѕР±РёР»РµР№.
 		ofstream f("auto.dat", ios::binary | ios::out);
-		f << abaseSize;
-		f.write((char*)autoBase, abaseSize*(sizeof(A)));
+		f << autobaseSize;
+		f.write((char*)autoBase, autobaseSize*(sizeof(AUTO)));
 
-		cout << " База автомобилей записана успешно " << endl;
+		cout << " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№ Р·Р°РїРёСЃР°РЅР° СѓСЃРїРµС€РЅРѕ " << endl;
 		system("pause");
 }
 
-void Base::ClearA()
+void Base::ClearAuto()
 {
 	if (!autoBase)
-    {
+	{
         return;
     }
 		delete[] autoBase;
 		autoBase = 0;
-		abaseSize = 0;
+		autobaseSize = 0;
 }
 
-void Base::ReadA()
+void Base::ReadAuto()
 {
-	ClearA();
+	ClearAuto();
+	
+    // in - С„Р°Р№Р»РѕРІР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ С‡С‚РµРЅРёСЏ Р±Р°Р·С‹ Р°РІС‚РѕРјРѕР±РёР»РµР№.
 	ifstream in("auto.dat", ios::binary | ios::in);
-	in >> abaseSize;
-	autoBase = new A[abaseSize];
-	in.read((char*)autoBase, abaseSize*(sizeof(A)));
+	in >> autobaseSize;
+	autoBase = new AUTO[autobaseSize];
+	in.read((char*)autoBase, autobaseSize*(sizeof(AUTO)));
 
-	cout << " База автомобилей загружена успешно " << endl;
-	system("pause");
+	cout << " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№ Р·Р°РіСЂСѓР¶РµРЅР° СѓСЃРїРµС€РЅРѕ " << endl; system("pause");
 }
 
-void Base::ShowA()
+void Base::ShowAuto()
 {
 	if (!autoBase)
     {
-        cout << " База автомобилей отсутствует " << endl;
+        cout << " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ " << endl;
         system("pause");
         return;
     }
-		cout << "База автомобилей:" << endl;
-		for (int i = 0; i < abaseSize; i++)
+		cout << "Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№:" << endl;
+		for (int i = 0; i < autobaseSize; i++)
         {
-           cout << "\nЗапись:\t" << i + 1 << "\n\tМодель:\t\t" << autoBase[i].type << "\n\tОбъем:\t\t" << autoBase[i].volume << "\n\tГод:\t\t" << autoBase[i].year << "\n\tБазовая цена:\t" << autoBase[i].price << "\n\tИтоговая цена:\t" << autoBase[i].priseout << endl;
+			cout << "\nР—Р°РїРёСЃСЊ:\t" << i + 1 << "\n\tРњРѕРґРµР»СЊ:\t\t" << autoBase[i].type << "\n\tРћР±СЉРµРј:\t\t" << autoBase[i].volume << "\n\tР“РѕРґ:\t\t" << autoBase[i].year << "\n\tР‘Р°Р·РѕРІР°СЏ С†РµРЅР°:\t" << autoBase[i].price << "\n\tРС‚РѕРіРѕРІР°СЏ С†РµРЅР°:\t" << autoBase[i].priseout << endl;
         }
 		cout << endl;
 		system("pause");
 }
 
-void Base::EditA()
+void Base::EditAuto()
 {
-
 	if (!autoBase)
-    {
-        cout << " База автомобилей отсутствует " << endl;
+	{
+	    cout << " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ " << endl;
         system("pause");
         return;
     }
 
-	// список строк меню, идентифицирующих записи в базе автомобилей
-	char** abaseList = new char*[abaseSize];
-	for (int i = 0; i < abaseSize; i++)
+	// СЃРїРёСЃРѕРє СЃС‚СЂРѕРє РјРµРЅСЋ, РёРґРµРЅС‚РёС„РёС†РёСЂСѓСЋС‰РёС… Р·Р°РїРёСЃРё РІ Р±Р°Р·Рµ Р°РІС‚РѕРјРѕР±РёР»РµР№
+	char** abaseList = new char*[autobaseSize];
+	for (int i = 0; i < autobaseSize; i++)
 	{
 		abaseList[i] = new char[200];
 		abaseList[i][0] = '\0';
-		sprintf(abaseList[i], "Модель: %s Цена: %d Год: %d", autoBase[i].type, autoBase[i].priseout, autoBase[i].year);
+		sprintf(abaseList[i], "РњРѕРґРµР»СЊ: %s Р¦РµРЅР°: %d Р“РѕРґ: %d", autoBase[i].type, autoBase[i].priseout, autoBase[i].year);
 	}
 
-	// редактирование выбранной записи
-	int i = mainMenu(abaseList, "\tВыберите клиента для редактирования записи\n\n", abaseSize);
+	// СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РІС‹Р±СЂР°РЅРЅРѕР№ Р·Р°РїРёСЃРё
+	int i = mMenu(abaseList, "\tР’С‹Р±РµСЂРёС‚Рµ РєР»РёРµРЅС‚Р° РґР»СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ Р·Р°РїРёСЃРё\n\n", autobaseSize);
 
-		cout << " Выбранная запись: " << endl;
-		cout << "\nЗапись:\t" << i + 1 << "\n\tМодель:\t" << autoBase[i].type << "\n\tОбъем:\t" << autoBase[i].volume << "\n\tГод:\t" << autoBase[i].year << "\n\tБазовая цена:\t" << autoBase[i].price << endl;
+		cout << " Р’С‹Р±СЂР°РЅРЅР°СЏ Р·Р°РїРёСЃСЊ: " << endl;
+		cout << "\nР—Р°РїРёСЃСЊ:\t" << i + 1 << "\n\tРњРѕРґРµР»СЊ:\t" << autoBase[i].type << "\n\tРћР±СЉРµРј:\t" << autoBase[i].volume << "\n\tР“РѕРґ:\t" << autoBase[i].year << "\n\tР‘Р°Р·РѕРІР°СЏ С†РµРЅР°:\t" << autoBase[i].price << endl;
 		cout << endl;
-		cout << "Название модели: " << endl;
+		cout << "РќР°Р·РІР°РЅРёРµ РјРѕРґРµР»Рё: " << endl;
 		inStr(autoBase[i].type);
-		cout << "Год производства: ";
-		inInt(autoBase[i].year);
-		cout << "Объем двигателя: ";
-		inInt(autoBase[i].volume);
-		cout << "Базовая цена: ";
-		inInt(autoBase[i].price);
+		cout << "Р“РѕРґ РїСЂРѕРёР·РІРѕРґСЃС‚РІР°: ";
+		inInt(autoBase[i].year,5);
+		cout << "РћР±СЉРµРј РґРІРёРіР°С‚РµР»СЏ: ";
+		inInt(autoBase[i].volume,5);
+		cout << "Р‘Р°Р·РѕРІР°СЏ С†РµРЅР°: ";
+		inInt(autoBase[i].price,8);
 		cout << endl;
 
-		cPrice(autoBase[i]);
+		customerPrice(autoBase[i]);
 
-
-	for (int i = 0; i < abaseSize; i++)
-    {
-        delete[]abaseList[i];
-    }
+	for (int i = 0; i < autobaseSize; i++)
+	{
+		delete[]abaseList[i];
+	}
 
 	delete[]abaseList;
 }
@@ -768,130 +840,129 @@ void Base::Info()
 {
 	if (!autoBase)
     {
-        cout << " База автомобилей отсутствует " << endl;
+        cout << " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ " << endl;
     }
 	else
     {
-        cout << " Размер базы автомобилей: " <<abaseSize<<endl;
+        cout << " Р Р°Р·РјРµСЂ Р±Р°Р·С‹ Р°РІС‚РѕРјРѕР±РёР»РµР№: " <<autobaseSize<<endl;
     }
 	if (!clientBase)
     {
-        cout << " База клиентов отсутствует " << endl;
+		cout << " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ " << endl;
     }
 	else
     {
-        cout << " Размер базы клиентов: " << cbaseSize << endl;
+		cout << " Р Р°Р·РјРµСЂ Р±Р°Р·С‹ РєР»РёРµРЅС‚РѕРІ: " << clientbaseSize << endl;
     }
-    system("pause");
+    
+	system("pause");
 }
 
-void Base::toDoA()
+void Base::toDoAuto()
 {
 	if (!autoBase)
     {
-        cout << " База автомобилей отсутствует " << endl;
+        cout << " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ " << endl;
         system("pause");
         return;
     }
 
 	char* todo[EXIT + 1];
 
-	todo[FMOD] = " Поиск, название модели";
-	todo[EXIT] = " Отмена";
-	todo[FPRICE] = " Поиск, цена не выше заданной";
-	todo[FVOL] = " Поиск, объем двигателя";
-	todo[FYEAR] = " Поиск, год выпуска";
-	todo[SPRICE] = " Сортировка, цена ";
-	todo[SYEAR] = " Сортировка, год выпуска";
+	todo[FMOD] = " РџРѕРёСЃРє, РЅР°Р·РІР°РЅРёРµ РјРѕРґРµР»Рё";
+	todo[EXIT] = " РћС‚РјРµРЅР°";
+	todo[FPRICE] = " РџРѕРёСЃРє, С†РµРЅР° РЅРµ РІС‹С€Рµ Р·Р°РґР°РЅРЅРѕР№";
+	todo[FVOL] = " РџРѕРёСЃРє, РѕР±СЉРµРј РґРІРёРіР°С‚РµР»СЏ";
+	todo[FYEAR] = " РџРѕРёСЃРє, РіРѕРґ РІС‹РїСѓСЃРєР°";
+	todo[SPRICE] = " РЎРѕСЂС‚РёСЂРѕРІРєР°, С†РµРЅР° ";
+	todo[SYEAR] = " РЎРѕСЂС‚РёСЂРѕРІРєР°, РіРѕРґ РІС‹РїСѓСЃРєР°";
 
-	commandA = (opA)mainMenu(todo, "\tРабота с базой автомобилей\n\n", EXIT + 1);
-	if(commandA!=EXIT)
+	commandAuto = (opA)mMenu(todo, "\tР Р°Р±РѕС‚Р° СЃ Р±Р°Р·РѕР№ Р°РІС‚РѕРјРѕР±РёР»РµР№\n\n", EXIT + 1);
+	if(commandAuto != EXIT)
     {
-        FSA();
+        Find_Sort_Auto();
     }
 
 }
 
-bool Base::ComparisonA(A & x, A & temp) //запись базы автомобилей, метод сравнивает две записи по одному из полей ( конкретное поле определяется переменной commandA).
+bool Base::CompareAuto(AUTO & x, AUTO & temp)
 {
-	if (commandA == FMOD)
+	if (commandAuto == FMOD)
     {
         return strcmp(x.type, temp.type) == 0;
     }
-	if (commandA == FPRICE)
-	{
-	    return x.priseout <= temp.priseout;
-	}
-
-	if (commandA == FVOL)
+	if (commandAuto == FPRICE)
     {
-        return x.volume == temp.volume;
+        return x.priseout<=temp.priseout;
     }
-	if (commandA == FYEAR)
+	if (commandAuto == FVOL)
+	{
+	    return x.volume == temp.volume;
+	}
+	if (commandAuto == FYEAR)
     {
         return x.year == temp.year;
     }
-	if (commandA == SPRICE)
+	if (commandAuto == SPRICE)
     {
         return x.priseout < temp.priseout;
     }
-	if (commandA == SYEAR)
+	if (commandAuto == SYEAR)
     {
         return x.year < temp.year;
     }
 	return false;
 }
 
-void Base::FSA()
+void Base::Find_Sort_Auto()
 {
-	A temp;
+	AUTO temp;
 
-	if (commandA == FMOD)
+	if (commandAuto == FMOD)
 	{
-		cout << "Введите название модели:" << endl;
+		cout << "Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ РјРѕРґРµР»Рё:" << endl;
 		inStr(temp.type);
 	}
-	if (commandA == FPRICE)
+	if (commandAuto == FPRICE)
 	{
-		cout << "Введите граничную стоимость:" << endl;
-		inInt(temp.priseout);
+		cout << "Р’РІРµРґРёС‚Рµ РіСЂР°РЅРёС‡РЅСѓСЋ СЃС‚РѕРёРјРѕСЃС‚СЊ:" << endl;
+		inInt(temp.priseout,8);
 	}
-	if (commandA == FVOL)
+	if (commandAuto == FVOL)
 	{
-		cout << "Введите объем двигателя:" << endl;
-		inInt(temp.volume);
+		cout << "Р’РІРµРґРёС‚Рµ РѕР±СЉРµРј РґРІРёРіР°С‚РµР»СЏ:" << endl;
+		inInt(temp.volume,5);
 	}
-	if (commandA == FYEAR)
+	if (commandAuto == FYEAR)
 	{
-		cout << "Введите год производства:" << endl;
-		inInt(temp.year);
+		cout << "Р’РІРµРґРёС‚Рµ РіРѕРґ РїСЂРѕРёР·РІРѕРґСЃС‚РІР°:" << endl;
+		inInt(temp.year,5);
 	}
-
-	if (commandA < SPRICE)
+	if (commandAuto < SPRICE)
 	{
-		cout << "Критерию поиска соответствуют записи:" << endl;
+		cout << "РљСЂРёС‚РµСЂРёСЋ РїРѕРёСЃРєР° СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‚ Р·Р°РїРёСЃРё:" << endl;
+		bool flag = true;
 
-		bool flag = true; //по значению flag можно установить, успешен ли поиск.
-
-		for (int i = 0; i < abaseSize; i++)
-			if (ComparisonA(autoBase[i], temp))
+		for (int i = 0; i < autobaseSize; i++)
+        {
+			if (CompareAuto(autoBase[i], temp))
 			{
 				flag = false;
-				cout << "\nЗапись:\t" << i + 1 << "\n\tМодель:\t\t" << autoBase[i].type << "\n\tОбъем:\t\t" << autoBase[i].volume << "\n\tГод:\t\t" << autoBase[i].year << "\n\tБазовая цена:\t" << autoBase[i].price << "\n\tИтоговая цена:\t" << autoBase[i].priseout << endl;
+				cout << "\nР—Р°РїРёСЃСЊ:\t" << i + 1 << "\n\tРњРѕРґРµР»СЊ:\t\t" << autoBase[i].type << "\n\tРћР±СЉРµРј:\t\t" << autoBase[i].volume << "\n\tР“РѕРґ:\t\t" << autoBase[i].year << "\n\tР‘Р°Р·РѕРІР°СЏ С†РµРЅР°:\t" << autoBase[i].price << "\n\tРС‚РѕРіРѕРІР°СЏ С†РµРЅР°:\t" << autoBase[i].priseout << endl;
 			}
-
+        }
 		if (flag)
         {
-            cout << "записей не найдено:" << endl;
+            cout << "Р·Р°РїРёСЃРµР№ РЅРµ РЅР°Р№РґРµРЅРѕ:" << endl;
         }
 	}
 	else
 	{
-		for (int i = 0; i < abaseSize - 1; i++)
+		for (int i = 0; i < autobaseSize - 1; i++)
         {
-			for (int j = 0; j < abaseSize - i - 1; j++)
+			for (int j = 0; j < autobaseSize - i - 1; j++)
 			{
-				if (ComparisonA(autoBase[j], autoBase[j + 1]))
+				if (CompareAuto(autoBase[j], autoBase[j + 1]))
 				{
 					temp = autoBase[j];
 					autoBase[j] = autoBase[j + 1];
@@ -899,236 +970,239 @@ void Base::FSA()
 				}
 			}
 		}
-		cout << "База автомобилей отсортирована:" << endl;
+		cout << "Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№ РѕС‚СЃРѕСЂС‚РёСЂРѕРІР°РЅР°:" << endl;
 	}
 	cout << endl;
 	system("pause");
 
 }
 
-void Base::Search_Base()
+void Base::FindInBase()
 {
-	B temp;
+	BUYER temp;
 
-	if (commandB == FNAMEB)
+	if (commandBuyer == FNAMEB)
 	{
-		cout << "Введите ФИО клиента:" << endl;
-		inStr(temp.Full_name);
+		cout << "Р’РІРµРґРёС‚Рµ Р¤РРћ РєР»РёРµРЅС‚Р°:" << endl;
+		inStr(temp.FullName);
 	}
-	if (commandB == FMODB)
+	if (commandBuyer == FMODB)
 	{
-		cout << "Введите название модели:" << endl;
+		cout << "Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ РјРѕРґРµР»Рё:" << endl;
 		inStr(temp.type);
 	}
-	if (commandB == FPRICEB)
+	if (commandBuyer == FPRICEB)
 	{
-		cout << "Введите граничное значение цены:" << endl;
-		inInt(temp.price);
+		cout << "Р’РІРµРґРёС‚Рµ РіСЂР°РЅРёС‡РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ С†РµРЅС‹:" << endl;
+		inInt(temp.price,8);
 	}
-	if (commandB == FYEARB)
+	if (commandBuyer == FYEARB)
 	{
-		cout << "Введите год производства:" << endl;
-		inInt(temp.year);
+		cout << "Р’РІРµРґРёС‚Рµ РіРѕРґ РїСЂРѕРёР·РІРѕРґСЃС‚РІР°:" << endl;
+		inInt(temp.year,5);
 	}
 
-	cout << "Критерию поиска соответствуют записи:" << endl;
-
+	cout << "РљСЂРёС‚РµСЂРёСЋ РїРѕРёСЃРєР° СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‚ Р·Р°РїРёСЃРё:" << endl;
+	
 	bool flag = true;
 
-	for (int i = 0; i < cbaseSize; i++)
+	for (int i = 0; i < clientbaseSize; i++)
     {
-		if (ComparisonB(clientBase[i], temp))
+		if (CompareBuyer(clientBase[i], temp))
 		{
 			flag = false;
 
-			cout << "\nЗапись:\t" << i + 1 << "\n\tФИО:\t\t" << clientBase[i].Full_name << "\n\tМодель:\t\t" << clientBase[i].type << "\n\tГод:\t\t" << clientBase[i].year << "\n\tГр.цена:\t" << clientBase[i].price << endl;
+			cout << "\nР—Р°РїРёСЃСЊ:\t" << i + 1 << "\n\tР¤РРћ:\t\t" << clientBase[i].FullName << "\n\tРњРѕРґРµР»СЊ:\t\t" << clientBase[i].type << "\n\tР“РѕРґ:\t\t" << clientBase[i].year << "\n\tР“СЂ.С†РµРЅР°:\t" << clientBase[i].price << endl;
 		}
     }
 
 	if (flag)
     {
-        cout << "записей не найдено:" << endl;
+        cout << "Р·Р°РїРёСЃРµР№ РЅРµ РЅР°Р№РґРµРЅРѕ:" << endl;
     }
 	system("pause");
-
 }
 
-bool Base::ComparisonB(B & x, B & temp)
+bool Base::CompareBuyer(BUYER & x, BUYER & temp)
 {
-	if (commandB == FNAMEB)
+	if (commandBuyer == FNAMEB)
     {
-        return strcmp(x.Full_name, temp.Full_name) == 0;
+        return strcmp(x.FullName, temp.FullName) == 0;
     }
-	if (commandB == FMODB)
+	if (commandBuyer == FMODB)
     {
         return strcmp(x.type, temp.type) == 0;
     }
-	if (commandB == FPRICEB)
+	if (commandBuyer == FPRICEB)
     {
         return x.price>=temp.price;
     }
-	if (commandB == FYEARB)
+	if (commandBuyer == FYEARB)
     {
         return x.year == temp.year;
     }
+
 	return false;
 }
 
-void Base::toDoB()
+void Base::toDoBuyer()
 {
 	if (!clientBase)
     {
-        cout << " База клиентов отсутствует " << endl;
+        cout << " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ " << endl;
         system("pause");
         return;
     }
 
 	char* todo[EXIBT + 1];
 
-	todo[FNAMEB] = " Поиск, имя клиента ";
-	todo[FMODB] = " Поиск, желаемая модель";
-	todo[FPRICEB] = " Поиск, цена не ниже заданной";
-	todo[FYEARB] = " Поиск, год выпуска";
-	todo[EXIBT] = " Отмена";
+	todo[FNAMEB] = " РџРѕРёСЃРє, РёРјСЏ РєР»РёРµРЅС‚Р° ";
+	todo[FMODB] = " РџРѕРёСЃРє, Р¶РµР»Р°РµРјР°СЏ РјРѕРґРµР»СЊ";
+	todo[FPRICEB] = " РџРѕРёСЃРє, С†РµРЅР° РЅРµ РЅРёР¶Рµ Р·Р°РґР°РЅРЅРѕР№";
+	todo[FYEARB] = " РџРѕРёСЃРє, РіРѕРґ РІС‹РїСѓСЃРєР°";
+	todo[EXIBT] = " РћС‚РјРµРЅР°";
 
-	commandB = (opB)mainMenu(todo, "\tРабота с базой клиентов\n\n", EXIBT + 1);
-	if (commandB != EXIBT)
+	commandBuyer = (opB)mMenu(todo, "\tР Р°Р±РѕС‚Р° СЃ Р±Р°Р·РѕР№ РєР»РёРµРЅС‚РѕРІ\n\n", EXIBT + 1);
+	if (commandBuyer != EXIBT)
     {
-        Search_Base();
+        FindInBase();
     }
 }
 
 Base::Base()
 {
-	memset(this, 0, sizeof(Base));   // обнуление полей
-	currentYear = 2017;                  // установка текущего года
+	memset(this, 0, sizeof(Base));   // РѕР±РЅСѓР»РµРЅРёРµ РїРѕР»РµР№
+	currentYear = 2017;                  // СѓСЃС‚Р°РЅРѕРІРєР° С‚РµРєСѓС‰РµРіРѕ РіРѕРґР°
 }
 
 void Base::initMenu()
 {
+      int mainmenuSize = 22;// С‡РёСЃР»Рѕ РїСѓРЅРєС‚РѕРІ РіР»Р°РІРЅРѕРіРѕ РјРµРЅСЋ
+      char** menu = new char*[mainmenuSize];// РјР°СЃСЃРёРІ СЃС‚СЂРѕРє РіР»Р°РІРЅРѕРіРѕ РјРµРЅСЋ
 
-      int mainmenuSize = 21;// число пунктов главного меню
-      char** menu = new char*[mainmenuSize];// массив строк главного меню
+	  menu[0] = " РРЅС„РѕСЂРјР°С†РёСЏ Рѕ Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… Р±Р°Р·Р°С…\n   ----------Р’С‹РІРѕРґ РІ РєРѕРЅСЃРѕР»СЊ-------------------------------";
+	  menu[1] = " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ";
+	  menu[2] = " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№\n   ----------Р—Р°РіСЂСѓР·РёС‚СЊ РёР· С„Р°Р№Р»Р°----------------------------";
+	  menu[3] = " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№";
+	  menu[4] = " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ\n   ----------РЎРѕС…СЂР°РЅРёС‚СЊ РІ С„Р°Р№Р»------------------------------";
+	  menu[5] = " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ";
+	  menu[6] = " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№\n   ----------РЎРѕР·РґР°С‚СЊ Р±Р°Р·Сѓ, Р·Р°РїРѕР»РЅРёС‚СЊ С‡РµСЂРµР· РєРѕРЅСЃРѕР»СЊ---------";
+	  menu[7] = " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ";
+	  menu[8] = " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№\n   ----------Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ Р±Р°Р·Сѓ----------------------------";
+	  menu[9] = " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ";
+	  menu[10] = " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№\n   ----------Р”РѕР±Р°РІРёС‚СЊ Р·Р°РїРёСЃСЊ РІ Р±Р°Р·Сѓ, РІРІРѕРґ РёР· РєРѕРЅСЃРѕР»Рё-------";
+	  menu[11] = " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ";
+	  menu[12] = " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№\n   ----------РЈРґР°Р»РёС‚СЊ Р·Р°РїРёСЃСЊ РёР· Р±Р°Р·С‹------------------------";
+	  menu[13] = " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ";
+	  menu[14] = " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№\n   ----------РџРѕРёСЃРє Рё СЃРѕСЂС‚РёСЂРѕРІРєР°----------------------------";
+	  menu[15] = " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ";
+	  menu[16] = " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№\n   ----------Р’С‹РіСЂСѓР·РёС‚СЊ РёР· РѕРїРµСЂР°С‚РёРІРЅРѕР№ РїР°РјСЏС‚Рё---------------";
+	  menu[17] = " Р‘Р°Р·Р° РєР»РёРµРЅС‚РѕРІ";
+	  menu[18] = " Р‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№\n   --------------------------------------------------------";
+	  menu[19] = " РџРѕРґР±РѕСЂ РїСЂРµРґР»РѕР¶РµРЅРёР№ РґР»СЏ РєР»РёРµРЅС‚Р°\n   --------------------------------------------------------";
+	  menu[20] = " Р’С‹РІРµСЃС‚Рё Р·Р°СЏРІРєСѓ РІ РєРѕРЅСЃРѕР»СЊ\n   --------------------------------------------------------";
+	  menu[21] = " Р’С‹Р№С‚Рё РёР· РїСЂРѕРіСЂР°РјРјС‹";
 
-	  menu[0] = " Информация о загруженных базах\n   ----------Вывод в консоль-------------------------------";
-	  menu[1] = " База клиентов";
-	  menu[2] = " База автомобилей\n   ----------Загрузить из файла----------------------------";
-	  menu[3] = " База автомобилей";
-	  menu[4] = " База клиентов\n   ----------Сохранить в файл------------------------------";
-	  menu[5] = " База клиентов";
-	  menu[6] = " База автомобилей\n   ----------Создать базу, заполнить через консоль---------";
-	  menu[7] = " База клиентов";
-	  menu[8] = " База автомобилей\n   ----------Редактировать базу----------------------------";
-	  menu[9] = " База клиентов";
-	  menu[10] = " База автомобилей\n   ----------Добавить запись в базу, ввод из консоли-------";
-	  menu[11] = " База клиентов";
-	  menu[12] = " База автомобилей\n   ----------Удалить запись из базы------------------------";
-	  menu[13] = " База клиентов";
-	  menu[14] = " База автомобилей\n   ----------Поиск и сортировка----------------------------";
-	  menu[15] = " База клиентов";
-	  menu[16] = " База автомобилей\n   ----------Выгрузить из оперативной памяти---------------";
-	  menu[17] = " База клиентов";
-	  menu[18] = " База автомобилей\n   --------------------------------------------------------";
-	  menu[19] = " Подбор предложений для клиента\n   --------------------------------------------------------";
-	  menu[20] = " Выйти из программы";
-
-	  //"   ----------Вывод в консоль-------------------------------";
-	  //"   ----------Загрузить из файла----------------------------";
-	  //"   ----------Сохранить в файл------------------------------";
-	  //"   ----------Создать базу, заполнить через консоль---------";
-	  //"   ----------Редактировать базу----------------------------";
-	  //"   ----------Добавить запись в базу, ввод из консоли-------";
-	  //"   ----------Удалить запись из базы------------------------";
-	  //"   ----------Поиск и сортировка----------------------------";
+	  //"   ----------Р’С‹РІРѕРґ РІ РєРѕРЅСЃРѕР»СЊ-------------------------------";
+	  //"   ----------Р—Р°РіСЂСѓР·РёС‚СЊ РёР· С„Р°Р№Р»Р°----------------------------";
+	  //"   ----------РЎРѕС…СЂР°РЅРёС‚СЊ РІ С„Р°Р№Р»------------------------------";
+	  //"   ----------РЎРѕР·РґР°С‚СЊ Р±Р°Р·Сѓ, Р·Р°РїРѕР»РЅРёС‚СЊ С‡РµСЂРµР· РєРѕРЅСЃРѕР»СЊ---------";
+	  //"   ----------Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ Р±Р°Р·Сѓ----------------------------";
+	  //"   ----------Р”РѕР±Р°РІРёС‚СЊ Р·Р°РїРёСЃСЊ РІ Р±Р°Р·Сѓ, РІРІРѕРґ РёР· РєРѕРЅСЃРѕР»Рё-------";
+	  //"   ----------РЈРґР°Р»РёС‚СЊ Р·Р°РїРёСЃСЊ РёР· Р±Р°Р·С‹------------------------";
+	  //"   ----------РџРѕРёСЃРє Рё СЃРѕСЂС‚РёСЂРѕРІРєР°----------------------------";
 	  //"   --------------------------------------------------------";
-	  //"   ----------Выгрузить из оперативной памяти---------------";
+	  //"   ----------Р’С‹РіСЂСѓР·РёС‚СЊ РёР· РѕРїРµСЂР°С‚РёРІРЅРѕР№ РїР°РјСЏС‚Рё---------------";
 
-
-	int NumMenu = 0;
-	while (NumMenu != mainmenuSize - 1)
+	int NumberMenu = 0;
+	while (NumberMenu != mainmenuSize - 1)
 	{
-		NumMenu = mainMenu(menu, "\tБаза автомобилей Атлант-М\n\n", mainmenuSize);
+		NumberMenu = mMenu(menu, "\tР‘Р°Р·Р° Р°РІС‚РѕРјРѕР±РёР»РµР№ РђС‚Р»Р°РЅС‚-Рњ\n\n", mainmenuSize);
 
-		if (NumMenu == 0)
+		if (NumberMenu == 0)
         {
             Info();
         }
-		if (NumMenu == 1)
+		if (NumberMenu == 1)
         {
-            ShowB();
+            ShowBuyer();
         }
-		if (NumMenu == 2)
+		if (NumberMenu == 2)
         {
-            ShowA();
+            ShowAuto();
         }
-		if (NumMenu == 3)
+		if (NumberMenu == 3)
         {
-            ReadA();
+            ReadAuto();
         }
-		if (NumMenu == 4)
+		if (NumberMenu == 4)
         {
-            ReadB();
+            ReadBuyer();
         }
-		if (NumMenu == 5)
+		if (NumberMenu == 5)
         {
-            WriteB();
+            WriteBuyer();
         }
-		if (NumMenu == 6)
+		if (NumberMenu == 6)
         {
-            WriteA();
+            WriteAuto();
         }
-		if (NumMenu == 7)
+		if (NumberMenu == 7)
         {
-            NewB();
+            NewBuyer();
         }
-		if (NumMenu == 8)
+		if (NumberMenu == 8)
         {
-            NewA();
+            NewAuto();
         }
-		if (NumMenu == 9)
+		if (NumberMenu == 9)
         {
-            EditB();
+            EditBuyer();
         }
-		if (NumMenu == 10)
+		if (NumberMenu == 10)
         {
-            EditA();
+            EditAuto();
         }
-		if (NumMenu == 11)
-		{
-		    AddB();
-		}
-		if (NumMenu == 12)
-		{
-		    AddA();
-		}
-		if (NumMenu == 13)
-		{
-		    DeleteB();
-		}
-		if (NumMenu == 14)
-		{
-		    DeleteA();
-		}
-		if (NumMenu == 15)
-		{
-		    toDoB();
-		}
-		if (NumMenu == 16)
-		{
-		    toDoA();
-		}
-		if (NumMenu == 17)
+		if (NumberMenu == 11)
         {
-            ClearB();
+            AddBuyer();
         }
-		if (NumMenu == 18)
-		{
-		    ClearA();
-		}
-		if (NumMenu == 19)
-		{
-		   findPosition();
-		}
+		if (NumberMenu == 12)
+        {
+            AddAuto();
+        }
+		if (NumberMenu == 13)
+        {
+            DeleteBuyer();
+        }
+		if (NumberMenu == 14)
+        {
+            DeleteAuto();
+        }
+		if (NumberMenu == 15)
+        {
+            toDoBuyer();
+        }
+		if (NumberMenu == 16)
+        {
+            toDoAuto();
+        }
+		if (NumberMenu == 17)
+        {
+            ClearBuyer();
+        }
+		if (NumberMenu == 18)
+        {
+            ClearAuto();
+        }
+		if (NumberMenu == 19)
+        {
+            findPosition();
+        }
+		if (NumberMenu == 20)
+        {
+            readText();
+        }
 	}
 
 	delete[]menu;
@@ -1136,18 +1210,17 @@ void Base::initMenu()
 
 Base::~Base()
 {
-	ClearA();
-	ClearB();
+	ClearAuto();
+	ClearBuyer();
 }
 
 int main()
 {
-	system("chcp 1251");                      // установка кодировки консоли
-	system("MODE CON: COLS=100 LINES=40");    // установка размера окна консоли
-	console_size(100, 200);                   // установка размера буфера консоли
-	Base B;                                   // создание объекта - базы
+	system("chcp 1251");                      // СѓСЃС‚Р°РЅРѕРІРєР° РєРѕРґРёСЂРѕРІРєРё РєРѕРЅСЃРѕР»Рё
+	system("MODE CON: COLS=100 LINES=40");    // СѓСЃС‚Р°РЅРѕРІРєР° СЂР°Р·РјРµСЂР° РѕРєРЅР° РєРѕРЅСЃРѕР»Рё
+	console_size(100, 200);                   // СѓСЃС‚Р°РЅРѕРІРєР° СЂР°Р·РјРµСЂР° Р±СѓС„РµСЂР° РєРѕРЅСЃРѕР»Рё
+	Base B;                                   // СЃРѕР·РґР°РЅРёРµ РѕР±СЉРµРєС‚Р° - Р±Р°Р·С‹
 
-	B.initMenu();                             // вход в цикл обработки
+	B.initMenu();                             // РІС…РѕРґ РІ С†РёРєР» РѕР±СЂР°Р±РѕС‚РєРё
 	return 0;
 }
-
